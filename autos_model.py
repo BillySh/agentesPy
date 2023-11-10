@@ -16,9 +16,15 @@ mapaObs = [(0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1),
            (0,6),(1,6),(2,6),(3,6),(0,9),(1,9),(2,9),(3,9),
            (6,0),(7,0),(8,0),(9,0),(6,1),(7,1),(8,1),(9,1),
            (6,2),(7,2),(8,2),(9,2),(6,3),(7,3),(8,3),(9,3),
-           (6,6),(7,6),(8,6),(9,6),(6,7),(7,7),(8,7),(9,7),
-           (6,8),(7,8),(8,8),(9,8),(6,9),(7,9),(8,9),(9,9)]
+           (6,6),(7,6),(8,6),(9,6),(6,9),(7,9),(8,9),(9,9)]
 #---------------------------Agents----------------------------------------
+
+"""
+Agents Type glosari:
+    agentT == 0 -> Obstacle
+    agentT == 1 -> SmoothOperator
+    agentT == 2 -> Drunk driver
+"""
 
 class CarAgent(Agent): #Car
     def __init__(self, unique_id, model):
@@ -26,12 +32,21 @@ class CarAgent(Agent): #Car
         self.speed = 0  # Initial speed
         self.locationX = 5  # Initial location
         self.locationY = 0  # Initial location
+        self.agentT = 2 #DrunkDriver 
 
     def move(self):
         possible_steps = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False
         )
-        possible = ((self.locationX + 1, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), (self.locationX, self.locationY-1), (self.locationX-1, self.locationY-1), (self.locationX+1, self.locationY+1))
+        possible = ((self.locationX + 1, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), (self.locationX+1, self.locationY+1))
+        if self.locationY >= 9:
+            pass
+            #print("Above", possible)
+            #print("Modulo de 9:", (self.locationY +1) %10)
+        if self.locationX >= 9:
+            possible = (((self.locationX + 1)%10, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), ((self.locationX+1)%10, self.locationY+1))
+            #print("Above", possible)
+            #print("Modulo de 9:", (self.locationY +1) %10)
         print("posible_New:", possible)
         print(possible_steps)
         for neighbor_cell in possible:
@@ -43,6 +58,7 @@ class CarAgent(Agent): #Car
                 #print("Entró")
                 value_to_remove = cell_contents
                 possible = tuple(value for value in possible if value != value_to_remove)
+                print("posible_RemoveDrunk:", possible)
 
         new_position = self.random.choice(possible)
         self.model.grid.move_agent(self, new_position)
@@ -58,6 +74,7 @@ class CarAgent(Agent): #Car
 class pavimentoAgent(Agent):
     def __init__(self,unique_id,model):
         super().__init__(unique_id,model)
+        self.agentT = 0 #Obstacle
      
     
     def step(self):
@@ -72,24 +89,35 @@ class CoolAgent(Agent):
         super().__init__(unique_id, model)
         self.crashed = False
         self.locationX = 4  # Initial location
-        self.locationY = 0
+        self.locationY = 8
+        self.agentT = 1 #SmoothOperator 
     
     def move(self):
         possible_steps = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False
         )
-        possible = [(self.locationX, self.locationY + 1)]  # Define possible as a list of tuples
-        print("possible_New:", possible)
-        print(possible_steps)
+        print("possible steps:", possible_steps)
+        possible = ( (self.locationX , self.locationY +1), (self.locationX-1, self.locationY+1),(self.locationX-1, self.locationY))
 
+        if self.locationY >= 9:
+            possible = ( (self.locationX , (self.locationY +1) %10), (self.locationX-1, (self.locationY +1) %10),(self.locationX-1, self.locationY))
+            print("Above", possible)
+            print("Modulo de 9:", (self.locationY +1) %10)
+        #print("posible_NewOther:", possible)
+        #print(possible_steps)
         for neighbor_cell in possible:
+            #print("Neighbor:",neighbor_cell)
             cell_contents = neighbor_cell
             cellmates = self.model.grid.get_cell_list_contents([cell_contents])
-
-            if len(cellmates) >= 1:
-                if random.random() <= 0.75:
-                    self.model.grid.move_agent(self, neighbor_cell)
-                    self.crashed = True
+            #print("Cellmate:", cellmates)
+            if len(cellmates) >=1: 
+                print("Entró")
+                x,y = neighbor_cell
+                value_to_remove = cell_contents
+                cell_contents = self.model.grid[x][y]
+                print("cellcon:", cell_contents)
+                possible = tuple(value for value in possible if value != value_to_remove)
+                print("posible_Remove:", possible)
 
         new_position = self.random.choice(possible)
         self.model.grid.move_agent(self, new_position)
