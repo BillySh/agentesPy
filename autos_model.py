@@ -14,6 +14,12 @@ mapaObs = [(0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1),
            (0,2),(1,2),(2,2),(3,2,),(0,3),(1,3),(2,3),(3,3),
            (0,4),(1,4),(2,4),(3,4),(0,5),(1,5),(2,5),(3,5),
            (0,6),(1,6),(2,6),(3,6),(0,9),(1,9),(2,9),(3,9),
+           #----------------------------------------------
+           (0,9),(1,9),(2,9),(3,9),(0,10),(1,10),(2,10),(3,10),
+           (0,19),(1,19),(2,19),(3,19),(0,18),(1,18),(2,18),(3,18),
+           (0,4),(1,4),(2,4),(3,4),(0,5),(1,5),(2,5),(3,5),
+           (0,6),(1,6),(2,6),(3,6),(0,9),(1,9),(2,9),(3,9),
+           #---------------------------
            (6,0),(7,0),(8,0),(9,0),(6,1),(7,1),(8,1),(9,1),
            (6,2),(7,2),(8,2),(9,2),(6,3),(7,3),(8,3),(9,3),
            (6,6),(7,6),(8,6),(9,6),(6,9),(7,9),(8,9),(9,9)]
@@ -39,14 +45,16 @@ class CarAgent(Agent): #Car
             self.pos, moore=True, include_center=False
         )
         possible = ((self.locationX + 1, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), (self.locationX+1, self.locationY+1))
-        if self.locationY >= 9:
-            pass
+        if self.locationY >= 19:
+            possible = ((self.locationX + 1, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , (self.locationY + 1)%20), (self.locationX+1, (self.locationY + 1)%20))
             #print("Above", possible)
             #print("Modulo de 9:", (self.locationY +1) %10)
-        if self.locationX >= 9:
-            possible = (((self.locationX + 1)%10, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), ((self.locationX+1)%10, self.locationY+1))
+        if self.locationX >= 19:
+            possible = (((self.locationX + 1)%20, self.locationY),(self.locationX - 1, self.locationY), (self.locationX , self.locationY +1), ((self.locationX+1)%20, self.locationY+1))
             #print("Above", possible)
             #print("Modulo de 9:", (self.locationY +1) %10)
+        if self.locationX >=19 and self.locationY >=19:
+            possible = (((self.locationX + 1)%20, self.locationY),((self.locationX - 1)%20, self.locationY), (self.locationX , (self.locationY +1)%20), ((self.locationX+1)%20, (self.locationY+1)%20))
         print("posible_New:", possible)
         print(possible_steps)
         for neighbor_cell in possible:
@@ -62,7 +70,7 @@ class CarAgent(Agent): #Car
 
         new_position = self.random.choice(possible)
         self.model.grid.move_agent(self, new_position)
-        print("new position:", new_position)
+        print("new positionDrunk:", new_position)
         self.locationX, self.locationY = new_position
 
     def step(self):
@@ -96,16 +104,21 @@ class CoolAgent(Agent):
         possible_steps = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False
         )
-        print("possible steps:", possible_steps)
+        
         possible = ( (self.locationX , self.locationY +1), (self.locationX-1, self.locationY+1),(self.locationX-1, self.locationY))
 
-        if self.locationY >= 9:
-            possible = ( (self.locationX , (self.locationY +1) %10), (self.locationX-1, (self.locationY +1) %10),(self.locationX-1, self.locationY))
-            print("Above", possible)
-            print("Modulo de 9:", (self.locationY +1) %10)
-        #print("posible_NewOther:", possible)
+        if self.locationY >= 19:
+            possible = ( (self.locationX , (self.locationY +1) %20), (self.locationX-1, (self.locationY +1) %20),(self.locationX-1, self.locationY))
+            #print("Above", possible)
+            #print("Modulo de 9:", (self.locationY +1) %10)
+        if self.locationX <= -19:
+            possible = ( (self.locationX , self.locationY +1), ((self.locationX-1)%20, self.locationY +1),((self.locationX-1) %20, self.locationY))
+            #print("Above", possible)
+            #print("Modulo de 9:", (self.locationY +1) %10)
+        #print("posible_NewOtherCool:", possible)
         #print(possible_steps)
         for neighbor_cell in possible:
+            #print("EStoy ya casi por salir--------")
             #print("Neighbor:",neighbor_cell)
             cell_contents = neighbor_cell
             cellmates = self.model.grid.get_cell_list_contents([cell_contents])
@@ -115,13 +128,13 @@ class CoolAgent(Agent):
                 x,y = neighbor_cell
                 value_to_remove = cell_contents
                 cell_contents = self.model.grid[x][y]
-                print("cellcon:", cell_contents)
+                #print("cellcon:", cell_contents)
                 possible = tuple(value for value in possible if value != value_to_remove)
                 print("posible_Remove:", possible)
 
         new_position = self.random.choice(possible)
         self.model.grid.move_agent(self, new_position)
-        print("new position:", new_position)
+        print("new positionCool:", new_position)
         self.locationX, self.locationY = new_position
 
 
