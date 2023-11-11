@@ -1,0 +1,36 @@
+#+title: Actividad M1
+Humberto Ivan Ulloa Cardona [A01657143]
+Carlos Damián Suárez Bernal [A01656277]
+Diego Andrés Figueroa Peart [A01660987]
+
+* Planteamiento
+Dado:
+- Habitación de MxN espacios.
+- Número de agentes.
+- Porcentaje de celdas inicialmente libres / ocupadas.
+- Tiempo máximo de ejecución o  cuántos agentes pueden recorrer el camino.
+Realiza la siguiente simulación:
+1. Inicializa las celdas ya sea como camino (espacio libre) o como obstáculo ( banquetas).
+2. Todos los agentes empiezan en la parte baja del camino y cruzan hacia arriba  evitando otros agentes u obstáculos.
+3. En cada paso de tiempo:
+   - El agente revisa si la celda que pretende ocupar al tiempo siguiente está libre.
+   - Si la celda está libre, el agente elije una dirección aleatoria para moverse (unas de las 3 celdas vecinas al frente, al frente derecha o al frente izquierda) y elije la acción de movimiento (si no puede moverse allí, permanecerá en la misma celda).
+4. Asigne una pequeña probabilidad de fallo (aún cuando quería ir adelante podría terminar adelante a la derecha).
+5. Si por "accidente" dos agentes ocupan la misma celda entonces el "choque" deberá permanecer en esa celda . ( Una celda ocupada que reducirá el espacio libre disponible para los agentes coche.
+6. Proponga una conducta más (por persona) que resulte en segundo tipo de agente ( además del descrito arriba).
+
+* Agentes implementados
+** Car Agent
+ Car agent es un carro cuya única acción es mantener un movimiento continuo hacia la parte de arriba del plano, y una vez que llega a la parte de arriba del grid, se incorpora en la parte inferior de nuevo con el fin de simular un movimiento toroidal para realizar esto, revisa si la casilla a la que se planea mover contiene algún otro agente de esta forma detecta por donde moverse. Ya que, el agente sólo puede moverse hacia arriba y la derecha, simulando a un conductor que nunca pasa el carril de sentido contrario. Además de detectar cuando comparte posición con otro agente auto, de esta cuando lo comparte choca.
+
+** Drunk Agent
+ Drunk agent es una simulación de un carro con un conductor en estado de ebriedad, sobre el cual se puede observar un comportamiento aleatorio y errático sobre la circulación de la pista. El carro mantiene un movimiento hacia la parte superior del modelo y esquiva a los agentes de tipo Building.
+
+** Toreto Agent
+Este agente es un corredor de carreras callejeras, el cual solo avanza hacia al frente, pero cuenta con un nivel de velocidades, desde 1 a 3. Por lo tanto, avanza de tres en tres cuando esta alcanza esa velocidad. La velocidad aumenta cada vez que completamos un move(). También puede chocar, pero tanto él como los agentes con lo que choca sufren de un derrape en su posición final, esto provocado también por el salto de casillas, además de ser un comportamiento de la vida real.
+
+** Building Agent
+El Building agent representa el espacio límite de nuestra pista, separa los distintos caminos que puede tomar un agente y sirve como una pared para definir los caminos de la misma.
+
+** Carril Izquierdo y derecho
+Estos agentes existen para que distinguir y mantener su camino en el carril para cualquier agente que lo atraviese.
