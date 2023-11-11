@@ -1,7 +1,9 @@
-#Humberto Ivan Ulloa Cardona 
+# Humberto Ivan Ulloa Cardona
+# Carlos Damian Suarez Bernal
+# Diego Andres Figueroa Peart
 # Make a code that simulates two cars and a colission
 
-#---------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------
 # Has multi-dimensional arrays and matrices. Has a large collection of
 # mathematical functions to operate on these arrays.
 import mesa
@@ -37,7 +39,7 @@ def agent_portrayal(agent):
         portrayal["Layer"] = 1
         portrayal["r"] = 0.5
         portrayal["Filled"] = True
-    
+
     if isinstance(agent, toretoAgent):
         portrayal["Shape"] = "circle"
         portrayal["Color"] = "purple"
@@ -70,6 +72,7 @@ def agent_portrayal(agent):
         portrayal["Filled"] = True
 
     return portrayal
+
 
 grid = mesa.visualization.CanvasGrid(agent_portrayal,20, 20)
 pasos_chart = mesa.visualization.ChartModule([{"Label": "pasos", "Color": "Red"}])
