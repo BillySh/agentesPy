@@ -211,15 +211,19 @@ class CoolAgent(Agent):
                 print("Habemos muchos3")
                 other2 =  cellmates[1]
                 if other2.agentT == 2:
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                     
 
@@ -243,8 +247,11 @@ class CarModel(Model):
         self.grid = mesa.space.MultiGrid(width, height, True)
         self.schedule = RandomActivation(self)
         o = 0
+        self.choques = 0
+        self.datacollector = mesa.DataCollector(
+            {"choques": "choques"}  # Choques
+        )
 
-       
         
         #Crete the obstacles
         for i in mapaObs:
