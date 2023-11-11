@@ -8,7 +8,7 @@ import mesa
 import numpy as np
 # Data manipulation and analysis.
 import pandas as pd
-from autos_model import CarModel, CarAgent, pavimentoAgent, CoolAgent
+from autos_model import CarModel, CarAgent, pavimentoAgent, CoolAgent, carrilizquierdoAgent, carrilDerechoAgent
 import matplotlib.pylab as plt
 
 def agent_portrayal(agent):
@@ -36,15 +36,31 @@ def agent_portrayal(agent):
         portrayal["w"] = 1
         portrayal["Filled"] = True
     
+    if isinstance(agent,carrilizquierdoAgent):
+        portrayal["Shape"] = "rect"
+        portrayal["Color"] = "grey"
+        portrayal["Layer"] = 1
+        portrayal["h"] = 1
+        portrayal["w"] = 1
+        portrayal["Filled"] = True
+    
+    if isinstance(agent,carrilDerechoAgent):
+        portrayal["Shape"] = "rect"
+        portrayal["Color"] = "grey"
+        portrayal["Layer"] = 1
+        portrayal["h"] = 1
+        portrayal["w"] = 1
+        portrayal["Filled"] = True
+    
     return portrayal
 
 
 
 
-grid = mesa.visualization.CanvasGrid(agent_portrayal, 10, 10, 500, 500)
+grid = mesa.visualization.CanvasGrid(agent_portrayal,20, 20)
 
 server = mesa.visualization.ModularServer(
-    CarModel, [grid], "Car Model", {"width": 10, "height": 10, "num_agents": 1 }
+    CarModel, [grid], "Car Model", {"width": 20, "height": 20, "num_agents": 3 }
 )
 server.port = 8521  # the defaul
 
