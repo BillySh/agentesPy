@@ -69,6 +69,13 @@ mapaDer = [#Primera fila del carril derecha 6,7 X
     (9,14),(9,15),(10,14),(10,15),(11,14),(11,15),(12,14),(12,15),(13,14),(13,15),(14,14),(14,15),(15,14),(15,15),(16,14),(16,15),
     (17,14),(17,15),(18,14),(18,15),(19,14),(19,15)
            ]
+
+mapaIzT = [(4,0), (5,0), (4,1), (5,1),(5,2),(4,2) ,(4,3), (5,3), (4,4), (5,4), (4,5), (5,5), (4,6), (5,6),
+          (4,7), (5,7), (4,8), (5,8), (4,9), (5,9), (4,10), (5,10), (4,11), (5,11), (4,12), (5,12),
+          (4,13), (5,13), (4,14), (5,14), (4,15), (5,15), (4,16), (5,16), (4,17), (5,17), 
+          (4,18), (5,18), (4,19), (5,19)
+
+           ]
 #---------------------------Agents----------------------------------------
 
 """
@@ -270,6 +277,105 @@ class CoolAgent(Agent):
         else:
             pass
 
+class toretoAgent(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+        self.crashed = False
+        self.speed = 1
+        self.locationX, self.locationY = self.random.choice(mapaIzT)
+        self.agentT = 1 #SmoothOperator 
+    
+
+    def move(self):
+        possible_steps = self.model.grid.get_neighborhood(
+            self.pos, moore=True, include_center=False
+        )
+
+        
+        possible = [( (self.locationX , self.locationY +self.speed))]
+        possibleT = ( (self.locationX , self.locationY +1), (self.locationX-1 , self.locationY +1),(self.locationX+1 , self.locationY +1 ), (self.locationX-1 , self.locationY ), (self.locationX+1 , self.locationY))
+        if self.locationY >= 19:
+            print("posible")
+            possible = [( (self.locationX , (self.locationY +self.speed) %20))]
+            possibleT = ( (self.locationX , (self.locationY +1) %20), (self.locationX-1 , (self.locationY +1) %20),(self.locationX+1 , (self.locationY +1) %20), (self.locationX+1 , self.locationY),(self.locationX+1 ,self.locationY))
+            
+        for neighbor_cell in possible:
+            print("Ciclo")
+            #print("EStoy ya casi por salir--------")
+            print("Neighbor:",neighbor_cell)
+
+            cell_contents = neighbor_cell
+            cellmates = self.model.grid.get_cell_list_contents([cell_contents])
+            
+            print("Cellmate:", cellmates)
+
+            if len(cellmates) >=2:
+                print("Habemos muchos3")
+                other2 =  cellmates[1]
+                if other2.agentT == 2:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                if other2.agentT == 1:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+            if len(cellmates) >=3:
+                print("Habemos muchos3")
+                other2 =  cellmates[2]
+                if other2.agentT == 2:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                if other2.agentT == 1:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+
+        #Solo chocar-------------------------------------------------------------------------------------------
+        for neighbor_cell in possibleT:
+            print("Ciclo")
+            #print("EStoy ya casi por salir--------")
+
+            cell_contents = neighbor_cell
+            cellmates = self.model.grid.get_cell_list_contents([cell_contents])
+
+            if len(cellmates) >=2:
+                print("Habemos muchos3")
+                other2 =  cellmates[1]
+                if other2.agentT == 2:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                if other2.agentT == 1:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+            if len(cellmates) >=3:
+                print("Habemos muchos3")
+                other2 =  cellmates[2]
+                if other2.agentT == 2:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                if other2.agentT == 1:
+                    self.crashed = True
+                    print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+        #--------------------------------------------------------------------------------------------------------
+                    
+
+        #If possible <= 1: Move to same position
+        
+        new_position = self.random.choice(possible)
+        print("NewToreto", new_position)
+        self.model.grid.move_agent(self, new_position)
+        print("new positionCool:", new_position)
+        self.locationX, self.locationY = new_position
+
+    def step(self):
+        if self.crashed ==False: 
+            self.move()
+            if self.speed <= 1:
+                self.speed +=1
+            if self.speed >= 3:
+                self.speed =self.speed
+
+        else:
+            pass
+
 
 # -------------------------------------------Model--------------------------------------------------------
 class CarModel(Model):
@@ -278,6 +384,7 @@ class CarModel(Model):
         self.grid = mesa.space.MultiGrid(width, height, True)
         self.schedule = RandomActivation(self)
         o = 0
+        d=1
         self.choques = 0
         self.pasos = 0
         self.running = True
@@ -325,6 +432,13 @@ class CarModel(Model):
         for i in range(self.num_agents):
             print("Auto")
             car_agent = CarAgent(o, self)
+            self.schedule.add(car_agent)
+            self.grid.place_agent(car_agent, (car_agent.locationX, car_agent.locationY))
+            o +=1 #Contador de ids
+        # Create toreto agents and add them to the schedule
+        for i in range(d):
+            print("AutoT")
+            car_agent = toretoAgent(o, self)
             self.schedule.add(car_agent)
             self.grid.place_agent(car_agent, (car_agent.locationX, car_agent.locationY))
             o +=1 #Contador de ids

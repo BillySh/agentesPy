@@ -8,7 +8,7 @@ import mesa
 import numpy as np
 # Data manipulation and analysis.
 import pandas as pd
-from autos_model import CarModel, CarAgent, pavimentoAgent, CoolAgent, carrilizquierdoAgent, carrilDerechoAgent
+from autos_model import CarModel, CarAgent, pavimentoAgent, CoolAgent, carrilizquierdoAgent, carrilDerechoAgent, toretoAgent
 import matplotlib.pylab as plt
 
 def get_pasos(model):
@@ -34,6 +34,13 @@ def agent_portrayal(agent):
     if isinstance(agent, CoolAgent):
         portrayal["Shape"] = "circle"
         portrayal["Color"] = "blue"
+        portrayal["Layer"] = 1
+        portrayal["r"] = 0.5
+        portrayal["Filled"] = True
+    
+    if isinstance(agent, toretoAgent):
+        portrayal["Shape"] = "circle"
+        portrayal["Color"] = "purple"
         portrayal["Layer"] = 1
         portrayal["r"] = 0.5
         portrayal["Filled"] = True
