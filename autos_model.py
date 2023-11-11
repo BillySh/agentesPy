@@ -84,9 +84,9 @@ class CarAgent(Agent): #Car
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.crashed =False
-        self.speed = 0  # Initial speed
+        self.speed = 0
         self.locationX, self.locationY = self.random.choice(mapaIz)
-        self.agentT = 2 #DrunkDriver 
+        self.agentT = 2
 
     def move(self):
         possible_steps = self.model.grid.get_neighborhood(
@@ -280,6 +280,7 @@ class CarModel(Model):
         o = 0
         self.choques = 0
         self.pasos = 0
+        self.running = True
         self.datacollector = mesa.DataCollector(
             {"pasos": "pasos",
             "choques": "choques"},
