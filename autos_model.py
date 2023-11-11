@@ -294,7 +294,7 @@ class toretoAgent(Agent):
         
         possible = [( (self.locationX , self.locationY +self.speed))]
         possibleT = ( (self.locationX , self.locationY +1), (self.locationX-1 , self.locationY +1),(self.locationX+1 , self.locationY +1 ), (self.locationX-1 , self.locationY ), (self.locationX+1 , self.locationY))
-        if self.locationY >= 19:
+        if self.locationY >= 18:
             print("posible")
             possible = [( (self.locationX , (self.locationY +self.speed) %20))]
             possibleT = ( (self.locationX , (self.locationY +1) %20), (self.locationX-1 , (self.locationY +1) %20),(self.locationX+1 , (self.locationY +1) %20), (self.locationX+1 , self.locationY),(self.locationX+1 ,self.locationY))
