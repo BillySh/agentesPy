@@ -83,9 +83,9 @@ Agents Type glosari:
 class CarAgent(Agent): #Car
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.crashed =False
         self.speed = 0  # Initial speed
-        self.locationX = 6  # Initial location
-        self.locationY = 0  # Initial location
+        self.locationX, self.locationY = self.random.choice(mapaIz)
         self.agentT = 2 #DrunkDriver 
 
     def move(self):
@@ -118,18 +118,39 @@ class CarAgent(Agent): #Car
                     possible = tuple(value for value in possible if value != value_to_remove)
                     #print("posible_RemoveDrunk:", possible)
                 #print("Entró")
+            if len(cellmates) >=2:
+                    print("Habemos muchos3")
+                    other2 =  cellmates[1]
+                    if other2.agentT == 2:
+                        self.crashed = True
+                        print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                    if other2.agentT == 1:
+                        self.crashed = True
+                        print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+            if len(cellmates) >=3:
+                print("Habemos muchos3")
+                other2 =  cellmates[2]
+                if other2.agentT == 2:
+                    self.crashed = True
+                    print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
+                if other2.agentT == 1:
+                    self.crashed = True
+                    print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
 
-        new_position = self.random.choice(possible)
-        self.model.grid.move_agent(self, new_position)
-        #print("new positionDrunk:", new_position)
-        self.locationX, self.locationY = new_position
+        #If possible <= 1: Move to same position
+        if len(possible) <=0:
+            self.model.grid.move_agent(self,self.pos)
+        if len(possible) >0:
+            new_position = self.random.choice(possible)
+            self.model.grid.move_agent(self, new_position)
+            print("new positionCool:", new_position)
+            self.locationX, self.locationY = new_position
 
     def step(self):
-        # Implement the logic for the car's behavior in each step
-        #This car will only move a designed path, following only its path
-        self.move()
-        # For example, you can update the speed and location here
-        pass
+        if self.crashed ==False: 
+            self.move()
+        else:
+            pass
 class pavimentoAgent(Agent):
     def __init__(self,unique_id,model):
         super().__init__(unique_id,model)
@@ -194,7 +215,7 @@ class CoolAgent(Agent):
             if len(cellmates) >=1: 
                 other = cellmates[0]
                 
-                print("Celmates:", cellmates)
+                #print("Celmates:", cellmates)
                 if other.agentT == 0:
                     #print("0:")
                     value_to_remove = cell_contents
@@ -211,29 +232,38 @@ class CoolAgent(Agent):
                 print("Habemos muchos3")
                 other2 =  cellmates[1]
                 if other2.agentT == 2:
+                    self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
+                    self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
+                    self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
+                    self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                     
 
         #If possible <= 1: Move to same position
-        new_position = self.random.choice(possible)
-        self.model.grid.move_agent(self, new_position)
-        print("new positionCool:", new_position)
-        self.locationX, self.locationY = new_position
+        if len(possible) <=0:
+            self.model.grid.move_agent(self,self.pos)
+        if len(possible) >0:
+            new_position = self.random.choice(possible)
+            self.model.grid.move_agent(self, new_position)
+            print("new positionCool:", new_position)
+            self.locationX, self.locationY = new_position
 
 
         
     def step(self):
-        self.move()
-        pass
+        if self.crashed ==False: 
+            self.move()
+        else:
+            pass
 
 
 #-------------------------------------------Model--------------------------------------------------------
