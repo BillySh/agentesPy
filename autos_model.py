@@ -314,18 +314,22 @@ class toretoAgent(Agent):
                 other2 =  cellmates[1]
                 if other2.agentT == 2:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
 
         #Solo chocar-------------------------------------------------------------------------------------------
@@ -341,18 +345,22 @@ class toretoAgent(Agent):
                 other2 =  cellmates[1]
                 if other2.agentT == 2:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
                     self.crashed = True
+                    self.model.toretoCrash += 1
                     print("ChoqueToreto!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
         #--------------------------------------------------------------------------------------------------------
                     
@@ -386,11 +394,13 @@ class CarModel(Model):
         o = 0
         d=1
         self.choques = 0
+        self.toretoCrash = 0
         self.pasos = 0
         self.running = True
         self.datacollector = mesa.DataCollector(
             {"pasos": "pasos",
-            "choques": "choques"},
+             "choques": "choques",
+             "toretoCrash": "toretoCrash"},
         )
 
         
