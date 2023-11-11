@@ -123,17 +123,21 @@ class CarAgent(Agent): #Car
                     other2 =  cellmates[1]
                     if other2.agentT == 2:
                         self.crashed = True
+                        self.model.choques += 1
                         print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                     if other2.agentT == 1:
                         self.crashed = True
+                        self.model.choques += 1
                         print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
                     self.crashed = True
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
+                    self.model.choques += 1
                     self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
 
@@ -147,7 +151,8 @@ class CarAgent(Agent): #Car
             self.locationX, self.locationY = new_position
 
     def step(self):
-        if self.crashed ==False: 
+        if self.crashed ==False:
+            self.model.pasos += 1
             self.move()
         else:
             pass
@@ -229,18 +234,20 @@ class CoolAgent(Agent):
                     #print("posible_RemoveCool4:", possible)
 
             if len(cellmates) >=2:
-                print("Habemos muchos3")
                 other2 =  cellmates[1]
                 if other2.agentT == 2:
                     self.model.choques += 1
+                    self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                 if other2.agentT == 1:
                     self.crashed = True
+                    self.model.choques += 1
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
             if len(cellmates) >=3:
                 print("Habemos muchos3")
                 other2 =  cellmates[2]
                 if other2.agentT == 2:
+                    self.model.choques += 1
                     self.crashed = True
                     print("Choque!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111111")
                     
@@ -257,13 +264,14 @@ class CoolAgent(Agent):
 
         
     def step(self):
-        if self.crashed ==False: 
+        if self.crashed == False:
+            self.model.pasos += 1
             self.move()
         else:
             pass
 
 
-#-------------------------------------------Model--------------------------------------------------------
+# -------------------------------------------Model--------------------------------------------------------
 class CarModel(Model):
     def __init__(self, width, height, num_agents):
         self.num_agents = num_agents
@@ -271,8 +279,10 @@ class CarModel(Model):
         self.schedule = RandomActivation(self)
         o = 0
         self.choques = 0
+        self.pasos = 0
         self.datacollector = mesa.DataCollector(
-            {"choques": "choques"}  # Choques
+            {"pasos": "pasos",
+            "choques": "choques"},
         )
 
         
@@ -319,4 +329,5 @@ class CarModel(Model):
             o +=1 #Contador de ids
 
     def step(self):
+        self.datacollector.collect(self)
         self.schedule.step()

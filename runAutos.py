@@ -11,6 +11,10 @@ import pandas as pd
 from autos_model import CarModel, CarAgent, pavimentoAgent, CoolAgent, carrilizquierdoAgent, carrilDerechoAgent
 import matplotlib.pylab as plt
 
+def get_pasos(model):
+    return f"Pasos: {model.pasos}"
+
+
 def get_choques(model):
     """
     Display a text count of how many crashes have occured.
@@ -63,15 +67,16 @@ def agent_portrayal(agent):
 
 
 grid = mesa.visualization.CanvasGrid(agent_portrayal,20, 20)
+pasos_chart = mesa.visualization.ChartModule([{"Label": "pasos", "Color": "Red"}])
 choques_chart = mesa.visualization.ChartModule([{"Label": "choques", "Color": "Black"}])
 
 server = mesa.visualization.ModularServer(
     CarModel,
-    [grid, get_choques, choques_chart],
+    [grid, get_choques, choques_chart, get_pasos, pasos_chart],
     "Car Model",
     {"width": 20, "height": 20, "num_agents": 3 },
 
 )
-server.port = 8521  # the defaul
+server.port = 8521  # the default
 
 server.launch()
